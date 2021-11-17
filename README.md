@@ -1,4 +1,4 @@
-# ESPHome BLE Keyboard for Home Assistant
+# ESPHome BLE Keyboard
 [![donate paypal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/dslonyara)
 [![donate tinkoff](https://img.shields.io/badge/Donate-Tinkoff-yellow.svg)](https://www.tinkoff.ru/sl/3FteV5DtBOV)
 
