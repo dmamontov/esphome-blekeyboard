@@ -176,7 +176,7 @@ class Esp32BLEKeyboard : public PollingComponent {
             char * position = strtok(buff[0], "+");
 
             while (position != 0) {
-                write_message(p, true);
+                write_message(position, true);
                 position = strtok(NULL, "+");
             }
 
