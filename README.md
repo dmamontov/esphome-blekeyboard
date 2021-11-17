@@ -79,8 +79,8 @@ data:
 service: esphome.blekeyboard_send
 data:
   message: 'KEY_LEFT_CTRL+KEY_LEFT_ALT+KEY_DELETE'
-  is_combination: false
-  delay_ms: 8
+  is_combination: true
+  delay_ms: 10
 ```
 
 ## Keys
