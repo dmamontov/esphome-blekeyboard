@@ -1,0 +1,76 @@
+substitutions:
+  board: esp32doit-devkit-v1 # Your esp32 board
+
+  # Wifi credentials
+  wifi_ssid: "esphome" # Required to replace
+  wifi_password: "esphome" # Required to replace
+
+  # OTA and API
+  ota_password: "esphome"
+  api_password: "esphome"
+  
+esphome:
+  name: blekeyboard
+  platform: ESP32
+  board: $board
+  includes:
+    - esp32_ble_keyboard.h
+  libraries:
+    - ESP32 BLE Arduino@>=1.0.1
+    - https://github.com/T-vK/ESP32-BLE-Keyboard/releases/download/0.3.0/ESP32-BLE-Keyboard.zip
+
+# Enable logging
+logger:
+
+# Enable OTA
+ota:
+  password: $ota_password
+
+# Enable WiFi
+wifi:
+  ssid: $wifi_ssid
+  password: $wifi_password
+  fast_connect: on
+
+# Enable Home Assistant API
+api:
+  password: $api_password
+  services:
+    - service: send
+      variables:
+        message: string
+        is_combination: bool
+        delay_ms: int
+      then:
+        lambda: |-
+          (static_cast<Esp32BLEKeyboard *>(ble_keyboard))->send_message(message.c_str(), is_combination, delay_ms);
+
+custom_component:
+  - lambda: |-
+      return {new Esp32BLEKeyboard(App.get_name(), "ESPHome")};
+    components:
+      - id: ble_keyboard
+
+binary_sensor:
+  - platform: custom
+    lambda: |-
+      auto kbd = static_cast<Esp32BLEKeyboard *>(ble_keyboard);
+      return {kbd->connected_binarysensor};
+    binary_sensors:
+      - name: "Connected"
+        device_class: "connectivity"
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+  - platform: custom
+    lambda: |-
+      auto kbd = static_cast<Esp32BLEKeyboard *>(ble_keyboard);
+      return {kbd->delay_sensor};
+    sensors:
+      - name: "Delay"
+        unit_of_measurement: "ms"
+        icon: "mdi:timer-outline"
+        accuracy_decimals: 0
+      
