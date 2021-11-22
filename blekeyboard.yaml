@@ -13,11 +13,15 @@ esphome:
   name: blekeyboard
   platform: ESP32
   board: $board
+  platformio_options: # Delete if you don't want to use NimBLE mode. More details: https://github.com/T-vK/ESP32-BLE-Keyboard#nimble-mode
+    build_flags: -D USE_NIMBLE
   includes:
-    - esp32_ble_keyboard.h
+    - inc/keyboard.h
+    - inc/keymap.h
   libraries:
     - ESP32 BLE Arduino@>=1.0.1
-    - https://github.com/T-vK/ESP32-BLE-Keyboard/releases/download/0.3.0/ESP32-BLE-Keyboard.zip
+    - https://github.com/h2zero/NimBLE-Arduino/archive/refs/tags/1.3.2.zip
+    - https://github.com/T-vK/ESP32-BLE-Keyboard/releases/download/0.3.1-beta/ESP32-BLE-Keyboard.zip
 
 # Enable logging
 logger:
@@ -43,13 +47,17 @@ api:
         delay_ms: int
       then:
         lambda: |-
-          (static_cast<Esp32BLEKeyboard *>(ble_keyboard))->send_message(message.c_str(), is_combination, delay_ms);
+          (static_cast<Esp32BLEKeyboard *>(ble_keyboard))->send_message(message, is_combination, delay_ms);
 
 custom_component:
   - lambda: |-
       return {new Esp32BLEKeyboard(App.get_name(), "ESPHome")};
     components:
       - id: ble_keyboard
+
+switch:
+  - platform: restart
+    name: "Restart"
 
 binary_sensor:
   - platform: custom
