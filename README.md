@@ -27,7 +27,7 @@ The firmware implements the ability to connect your esp32 device as a BLE keyboa
 
 ## Build
 
-1. Fill in WiFi credentials and esp32 board in [blekeyboard.yaml](https://github.com/dmamontov/esphome-blekeyboard/blob/main/blekeyboard.yaml)
+1. Fill in WiFi credentials and esp32 board in [blekeyboard.yaml](https://github.com/dmamontov/esphome-blekeyboard/blob/main/blekeyboard.yaml#L5-L6)
 2. Use [ESPHome](https://esphome.io) to build and upload firmware
 
 ## Entities
