@@ -47,7 +47,7 @@ api:
         delay_ms: int
       then:
         lambda: |-
-          (static_cast<Esp32BLEKeyboard *>(ble_keyboard))->send_message(message, is_combination, delay_ms);
+          (static_cast<Esp32BLEKeyboard *>(ble_keyboard))->release(message, delay_ms);
 
 custom_component:
   - lambda: |-
