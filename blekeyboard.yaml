@@ -43,7 +43,6 @@ api:
     - service: send
       variables:
         message: string
-        is_combination: bool
         delay_ms: int
       then:
         lambda: |-
