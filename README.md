@@ -89,6 +89,15 @@ data:
   delay_ms: 14
 ```
 
+#### Lock an iPad
+
+```yaml
+service: esphome.blekeyboard_send
+data:
+  message: KEY_LEFT_GUI\+KEY_LEFT_CTRL\+q
+  delay_ms: 100
+```
+
 ## Keys
 
 [List of keys that are supported](https://github.com/dmamontov/esphome-blekeyboard/blob/main/inc/keymap.h)
