@@ -13,20 +13,18 @@ namespace esphome {
             public:
                 void set_parent(Esp32BleKeyboard *parent) { parent_ = parent; }
 
-                void set_text_value(std::string text_value) { text_value_ = text_value; }
-                void set_int_value(uint8_t int_value) { int_value_ = int_value; }
-                void set_media_value(uint8_t first_value, uint8_t two_value) {
-                    media_value_first_ = first_value;
-                    media_value_two_ = two_value;
+                void set_value(std::string value) { text_value_ = value; }
+                void set_value(int8_t first_value, int8_t second_value = -1) {
+                    first_value_ = first_value;
+                    second_value_ = second_value;
                 }
 
             protected:
                 void press_action() override;
 
                 std::string text_value_{""};
-                uint8_t int_value_{0};
-                uint8_t media_value_first_{0};
-                uint8_t media_value_two_{0};
+                int8_t first_value_{-1};
+                int8_t second_value_{-1};
 
                 Esp32BleKeyboard *parent_;
         };
