@@ -1,27 +1,34 @@
+# BLE Keyboard project
+# https://github.com/dmamontov/esphome-blekeyboard
+
+############# User configuration #############
+
 substitutions:
-  board: esp32doit-devkit-v1 # Your esp32 board
+
+  board: esp32doit-devkit-v1
+  mdns_name: blekeyboard
 
   # Wifi credentials
-  wifi_ssid: "esphome" # Required to replace
-  wifi_password: "esphome" # Required to replace
+  wifi_ssid: "mywifissid"
+  wifi_password: "miwifipassword"
 
   # OTA and API
   ota_password: "esphome"
   api_password: "esphome"
-  
+
+  # Software configuration
+  input_text_entity_id: "input_text.blekeyboard_new_message" # A string object for entering arbitrary text.
+
+
+########### End user configuration ###########
+
+
+############# Base configuration #############
+
 esphome:
-  name: blekeyboard
+  name: $mdns_name
   platform: ESP32
   board: $board
-  platformio_options: # Delete if you don't want to use NimBLE mode. More details: https://github.com/T-vK/ESP32-BLE-Keyboard#nimble-mode
-    build_flags: -D USE_NIMBLE
-  includes:
-    - inc/keyboard.h
-    - inc/keymap.h
-  libraries:
-    - ESP32 BLE Arduino@>=1.0.1
-    - https://github.com/h2zero/NimBLE-Arduino/archive/refs/tags/1.3.2.zip
-    - https://github.com/T-vK/ESP32-BLE-Keyboard/releases/download/0.3.1-beta/ESP32-BLE-Keyboard.zip
 
 # Enable logging
 logger:
@@ -39,45 +46,44 @@ wifi:
 # Enable Home Assistant API
 api:
   password: $api_password
-  services:
-    - service: send
-      variables:
-        message: string
-        delay_ms: int
-      then:
-        lambda: |-
-          (static_cast<Esp32BLEKeyboard *>(ble_keyboard))->release(message, delay_ms);
 
-custom_component:
-  - lambda: |-
-      return {new Esp32BLEKeyboard(App.get_name(), "ESPHome")};
-    components:
-      - id: ble_keyboard
+########### End base configuration ###########
 
-switch:
-  - platform: restart
-    name: "Restart"
+# Enable components
+external_components:
+  - source:
+      type: local
+      path: components
 
-binary_sensor:
-  - platform: custom
-    lambda: |-
-      auto kbd = static_cast<Esp32BLEKeyboard *>(ble_keyboard);
-      return {kbd->connected_binarysensor};
-    binary_sensors:
-      - name: "Connected"
-        device_class: "connectivity"
+ble_keyboard:
+  id: my_ble_keyboard
+  name: "MyBleKeyboard"
+  manufacturer_id: "Apple"
+  battery_level: 50
+
+text_sensor:
+  - platform: homeassistant
+    id: input_text
+    entity_id: $input_text_entity_id
+    internal: true
 
 sensor:
   - platform: wifi_signal
     name: "WiFi Signal"
     update_interval: 60s
-  - platform: custom
-    lambda: |-
-      auto kbd = static_cast<Esp32BLEKeyboard *>(ble_keyboard);
-      return {kbd->delay_sensor};
-    sensors:
-      - name: "Delay"
-        unit_of_measurement: "ms"
-        icon: "mdi:timer-outline"
-        accuracy_decimals: 0
-      
+
+button:
+  - platform: restart
+    entity_category: "config"
+    name: "Restart"
+
+  - platform: template
+    name: "Release"
+    id: key_release
+    icon: "mdi:send"
+    on_press:
+      then:
+        - ble_keyboard.print:
+            id: my_ble_keyboard
+            text: !lambda "return id(input_text).state;"
+        - ble_keyboard.release: my_ble_keyboard
