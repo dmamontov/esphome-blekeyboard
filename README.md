@@ -79,7 +79,7 @@ ble_keyboard.press:
 ```
 
 * **id** (Required, string): Component ID;
-* **code** (Required, int): Key code.
+* **code** (Required, int): [Key code](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys).
 
 #### ble_keyboard.release
 
