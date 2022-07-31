@@ -9,8 +9,8 @@ substitutions:
   mdns_name: blekeyboard
 
   # Wifi credentials
-  wifi_ssid: "Mamontov"
-  wifi_password: "14101990"
+  wifi_ssid: "mywifissid"
+  wifi_password: "miwifipassword"
 
   # OTA and API
   ota_password: "esphome"

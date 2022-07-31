@@ -1,103 +1,91 @@
 # ESPHome BLE Keyboard
-[![donate paypal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/dslonyara)
-[![donate tinkoff](https://img.shields.io/badge/Donate-Tinkoff-yellow.svg)](https://www.tinkoff.ru/sl/3FteV5DtBOV)
+[![CodeQL](https://img.shields.io/badge/CODEQL-Passing-30C854.svg?style=for-the-badge)](https://github.com/dmamontov/hass-miwifi/actions?query=CodeQL)
+[![Telegram](https://img.shields.io/badge/Telegram-channel-34ABDF.svg?style=for-the-badge)](https://t.me/hass_mamontov_tech)
 
-The firmware implements the ability to connect your esp32 device as a BLE keyboard and send keystrokes via Home Assistant
+Custom [esphome](https://esphome.io/) component to implement a virtual BLE keyboard.
 
-## Table of Contents
-- [FAQ](#faq)
-- [Build](#build)
-- [Entities](#entities)
-- [Service](#service)
-- [Examples](#examples)
-- [Keys](#keys)
+## More info
 
-## FAQ
-**Q. Are all keys supported?**
+- [Base configuration](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration)
+  - [Adding a component](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#adding-a-component)
+  - [Configuration](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#configuration)
+  - [Actions](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#actions)
+    - [ble_keyboard.print](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardprint)
+    - [ble_keyboard.press](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardpress)
+    - [ble_keyboard.release](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardrelease)
+- [Supported OS](https://github.com/dmamontov/esphome-blekeyboard/wiki/Supported-OS)
+- [Keys](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys)
+  - [Default](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys#default)
+  - [Media](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys#media)
+- [Entities](https://github.com/dmamontov/esphome-blekeyboard/wiki/Entities)
 
-**A.** No, only those that are implemented in the [ESP32 BLE Keyboard library](https://github.com/T-vK/ESP32-BLE-Keyboard). This also applies to languages.
+## Supported OS
+| OS      | Description             |
+|---------|-------------------------|
+| Windows | Fully supported         |
+| Linux   | Fully supported         |
+| Android | Fully supported         |
+| MacOS   | It does not work stably |
+| IOS     | It does not work stably |
 
-**Q. What devices can the keyboard be connected to?**
+## Base configuration
 
-**A.** Windows, Linux, Android - Fully supported. MacOS, IOS - It does not work stably. But it works. More details in the library: [ESP32 BLE Keyboard library](https://github.com/T-vK/ESP32-BLE-Keyboard)
-
-**Q. No keys are pressed or one is pressed several times. What to do?**
-
-**A.** The delay modification will help.
-
-## Build
-
-1. Fill in WiFi credentials and esp32 board in [blekeyboard.yaml](https://github.com/dmamontov/esphome-blekeyboard/blob/main/blekeyboard.yaml#L5-L6)
-2. Use [ESPHome](https://esphome.io) to build and upload firmware
-
-## Entities
-
-- Connected (binary_sensor) - Whether the device is connected to the keyboard.
-- Delay (sensor) - The last set delay. After rebooting the device is reset to 8ms by default.
-- Wifi Signal (sensor) - Wifi signal strength.
-- Restart (switch) - Reboots the device.
-
-## Service
-
-**Via GUI (Recommended)**
-
-`Developer-tools` > `Service` > `esphome.blekeyboard_send`
-
-**Via YAML (legacy way)**
-```yaml
-service: esphome.blekeyboard_send
-data:
-  message: 'Hello world!' # Message, key name or key combination separated by \+.
-  delay_ms: 14 # Delay between clicks in milliseconds
-```
-
-## Examples
-
-#### Sending a simple message
+### Adding a component
 
 ```yaml
-service: esphome.blekeyboard_send
-data:
-  message: 'Hello world!'
-  delay_ms: 14
+external_components:
+  - source: github://dmamontov/esphome-blekeyboard
 ```
 
-#### Pressing the ENTER key
+### Configuration
 
 ```yaml
-service: esphome.blekeyboard_send
-data:
-  message: 'KEY_RETURN'
-  delay_ms: 14
+ble_keyboard:
+  id: mamontech_keyboard
+  name: "MamonTechKeyboard"
+  manufacturer_id: "MamonTech"
+  battery_level: 50
 ```
 
-#### Press CTRL + ALT + DELETE
+* **id** (Optional, string): Component ID. Needed for action;
+* **name** (Optional, string): Keyboard name (default: Esp32BleKeyboard);
+* **manufacturer_id** (Optional, string): Keyboard manufacturer (default: Esp32BleKeyboard);
+* **battery_level** (Optional, int): Keyboard battery level (default: 100).
+
+### Actions
+
+#### ble_keyboard.print
+
+Print arbitrary text.
 
 ```yaml
-service: esphome.blekeyboard_send
-data:
-  message: 'KEY_LEFT_CTRL\+KEY_LEFT_ALT\+KEY_DELETE'
-  delay_ms: 14
+ble_keyboard.print:
+  id: my_ble_keyboard 
+  text: "hello"
 ```
 
-#### Press CTRL + A
+* **id** (Required, string): Component ID;
+* **text** (Required, string): The text to be printed.
+
+#### ble_keyboard.press
+
+Press a key.
 
 ```yaml
-service: esphome.blekeyboard_send
-data:
-  message: 'KEY_LEFT_CTRL\+a'
-  delay_ms: 14
+ble_keyboard.press:
+  id: my_ble_keyboard 
+  code: 0x80
 ```
 
-#### Lock an iPad
+* **id** (Required, string): Component ID;
+* **code** (Required, int): Key code.
+
+#### ble_keyboard.release
+
+Release keys.
 
 ```yaml
-service: esphome.blekeyboard_send
-data:
-  message: KEY_LEFT_GUI\+KEY_LEFT_CTRL\+q
-  delay_ms: 100
+ble_keyboard.release: my_ble_keyboard
 ```
 
-## Keys
-
-[List of keys that are supported](https://github.com/dmamontov/esphome-blekeyboard/blob/main/inc/keymap.h)
+* **id** (Required, string): Component ID;

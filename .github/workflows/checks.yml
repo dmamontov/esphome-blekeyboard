@@ -1,0 +1,42 @@
+name: Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  lint:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dmamontov/esphome-lint@main
+        with:
+          esphome-version: ">=2022.6.0"
+          path: "components/ble_keyboard"
+          extra-pylint-options: "--disable=unused-argument"
+          use-esphome-compile: true
+          esphome-compile-file: "blekeyboard.yaml"
+          use-clang-format: true
+          extra-clang-format-options: "-assume-filename=.clang-format"
+
+  codeql:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'python', 'cpp' ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+      - uses: github/codeql-action/autobuild@v2
+      - uses: github/codeql-action/analyze@v2
