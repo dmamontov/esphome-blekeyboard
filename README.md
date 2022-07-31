@@ -18,6 +18,7 @@ Custom [esphome](https://esphome.io/) component to implement a virtual BLE keybo
   - [Default](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys#default)
   - [Media](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys#media)
 - [Entities](https://github.com/dmamontov/esphome-blekeyboard/wiki/Entities)
+- [Example](blekeyboard.yaml)
 
 ## Supported OS
 | OS      | Description             |
