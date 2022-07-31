@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'python', 'cpp' ]
+        language: [ 'python' ]
     steps:
       - uses: actions/checkout@v2
       - uses: github/codeql-action/init@v2
