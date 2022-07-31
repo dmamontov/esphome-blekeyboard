@@ -54,6 +54,7 @@ external_components:
   - source:
       type: local
       path: components
+#  - source: github://dmamontov/esphome-blekeyboard
 
 ble_keyboard:
   id: my_ble_keyboard
