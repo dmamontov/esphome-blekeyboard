@@ -1,2 +1,5 @@
 blekeyboard/
 .DS_Store
+__pycache__
+.mypy_cache
+.esphome

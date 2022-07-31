@@ -83,6 +83,7 @@ button:
     icon: "mdi:send"
     on_press:
       then:
-        - ble_keyboard.press:
+        - ble_keyboard.print:
             id: my_ble_keyboard
-            value: !lambda "return id(input_text).state;"
+            text: !lambda "return id(input_text).state;"
+        - ble_keyboard.release: my_ble_keyboard

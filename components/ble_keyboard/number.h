@@ -8,27 +8,27 @@
 #include "ble_keyboard.h"
 
 namespace esphome {
-    namespace ble_keyboard {
-        class Esp32BleKeyboardNumber : public number::Number, public Component {
-            public:
-                void setup() override;
+namespace ble_keyboard {
+class Esp32BleKeyboardNumber : public number::Number, public Component {
+ public:
+  void setup() override;
 
-                float get_setup_priority() const override { return setup_priority::AFTER_BLUETOOTH; }
+  float get_setup_priority() const override { return setup_priority::AFTER_BLUETOOTH; }
 
-                void set_initial_value(float initial_value) { initial_value_ = initial_value; }
-                void set_parent(Esp32BleKeyboard *parent) { parent_ = parent; }
-                void enable_press() { is_press_ = true; }
+  void set_initial_value(float initial_value) { initial_value_ = initial_value; }
+  void set_parent(Esp32BleKeyboard *parent) { parent_ = parent; }
+  void enable_press() { is_press_ = true; }
 
-            protected:
-                void control(float value) override;
+ protected:
+  void control(float value) override;
 
-                float initial_value_{NAN};
-                bool is_press_{false};
+  float initial_value_{NAN};
+  bool is_press_{false};
 
-                Esp32BleKeyboard *parent_;
-                ESPPreferenceObject pref_;
-        };
-    }
-}
+  Esp32BleKeyboard *parent_;
+  ESPPreferenceObject pref_;
+};
+}  // namespace ble_keyboard
+}  // namespace esphome
 
 #endif
