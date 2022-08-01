@@ -24,8 +24,8 @@ class Esp32BleKeyboard : public PollingComponent {
   void set_state_sensor(binary_sensor::BinarySensor *state_sensor) { state_sensor_ = state_sensor; }
 
   void press(std::string message);
-  void press(uint8_t key);
-  void press(MediaKeyReport key);
+  void press(uint8_t key, bool with_timer = true);
+  void press(MediaKeyReport key, bool with_timer = true);
   void release();
 
  protected:

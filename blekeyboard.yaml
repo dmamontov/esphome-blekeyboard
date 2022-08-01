@@ -61,6 +61,7 @@ ble_keyboard:
   name: "MyBleKeyboard"
   manufacturer_id: "Apple"
   battery_level: 50
+  buttons: true
 
 text_sensor:
   - platform: homeassistant
@@ -88,3 +89,16 @@ button:
             id: my_ble_keyboard
             text: !lambda "return id(input_text).state;"
         - ble_keyboard.release: my_ble_keyboard
+
+  - platform: template
+    name: "Ctrl + A"
+    id: key_ctrl_a
+    icon: "mdi:vector-combine"
+    on_press:
+      then:
+        - ble_keyboard.combination:
+            id: my_ble_keyboard
+            delay: 8
+            keys:
+              - 0x80
+              - "a"
