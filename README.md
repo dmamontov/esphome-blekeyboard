@@ -54,7 +54,7 @@ ble_keyboard:
 * **name** (Optional, string): Keyboard name (default: Esp32BleKeyboard);
 * **manufacturer_id** (Optional, string): Keyboard manufacturer (default: Esp32BleKeyboard);
 * **battery_level** (Optional, int): Keyboard battery level (default: 100).
-* **buttons** (Optional, bool): Whether to add separate buttons for keys (default: true).
+* **buttons** (Optional, bool): Whether to add separate buttons for [keys](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys) (default: true).
 
 ### Actions
 
@@ -92,4 +92,19 @@ Release keys.
 ble_keyboard.release: my_ble_keyboard
 ```
 
+#### ble_keyboard.combination
+
+Press a key combination.
+
+```yaml
+ble_keyboard.combination:
+  id: my_ble_keyboard
+  delay: 8
+  keys:
+    - 0x80 # Left CTRL
+    - "a"
+```
+
 * **id** (Required, string): Component ID;
+* **delay** (Required, int): Delay between clicks;
+* **keys** (Required, list[int, string]): Key list;
