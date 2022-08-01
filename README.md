@@ -13,6 +13,7 @@ Custom [esphome](https://esphome.io/) component to implement a virtual BLE keybo
     - [ble_keyboard.print](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardprint)
     - [ble_keyboard.press](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardpress)
     - [ble_keyboard.release](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardrelease)
+    - [ble_keyboard.combination](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardcombination)
 - [Supported OS](https://github.com/dmamontov/esphome-blekeyboard/wiki/Supported-OS)
 - [Keys](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys)
   - [Default](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys#default)
@@ -45,12 +46,14 @@ ble_keyboard:
   name: "MamonTechKeyboard"
   manufacturer_id: "MamonTech"
   battery_level: 50
+  buttons: true
 ```
 
 * **id** (Optional, string): Component ID. Needed for action;
 * **name** (Optional, string): Keyboard name (default: Esp32BleKeyboard);
 * **manufacturer_id** (Optional, string): Keyboard manufacturer (default: Esp32BleKeyboard);
 * **battery_level** (Optional, int): Keyboard battery level (default: 100).
+* **buttons** (Optional, bool): Whether to add separate buttons for keys (default: true).
 
 ### Actions
 

@@ -12,6 +12,7 @@ from esphome.components import binary_sensor, button, number
 from esphome.const import (
     CONF_BATTERY_LEVEL,
     CONF_CODE,
+    CONF_DELAY,
     CONF_ID,
     CONF_INITIAL_VALUE,
     CONF_MANUFACTURER_ID,
@@ -25,6 +26,7 @@ from esphome.core import ID
 from esphome.cpp_generator import LambdaExpression, MockObj, TemplateArguments
 
 from .const import (
+    ACTION_COMBINATION_CLASS,
     ACTION_PRESS_CLASS,
     ACTION_PRINT_CLASS,
     ACTION_RELEASE_CLASS,
@@ -34,6 +36,8 @@ from .const import (
     COMPONENT_BUTTON_CLASS,
     COMPONENT_CLASS,
     COMPONENT_NUMBER_CLASS,
+    CONF_BUTTONS,
+    CONF_KEYS,
     CONF_TEXT,
     DOMAIN,
     LIBS,
@@ -50,11 +54,6 @@ ble_keyboard_ns = cg.esphome_ns.namespace(DOMAIN)
 BLEKeyboard = ble_keyboard_ns.class_(COMPONENT_CLASS, cg.PollingComponent)
 BLEKeyboardNumber = ble_keyboard_ns.class_(COMPONENT_NUMBER_CLASS, cg.Component)
 BLEKeyboardButton = ble_keyboard_ns.class_(COMPONENT_BUTTON_CLASS, cg.Component)
-BLEKeyboardPrintAction = ble_keyboard_ns.class_(ACTION_PRINT_CLASS, automation.Action)
-BLEKeyboardPressAction = ble_keyboard_ns.class_(ACTION_PRESS_CLASS, automation.Action)
-BLEKeyboardReleaseAction = ble_keyboard_ns.class_(
-    ACTION_RELEASE_CLASS, automation.Action
-)
 
 CONFIG_SCHEMA: Final = cv.Schema(
     {
@@ -62,6 +61,7 @@ CONFIG_SCHEMA: Final = cv.Schema(
         cv.Optional(CONF_NAME, default=COMPONENT_CLASS): cv.Length(min=1),
         cv.Optional(CONF_MANUFACTURER_ID, default=COMPONENT_CLASS): cv.Length(min=1),
         cv.Optional(CONF_BATTERY_LEVEL, default=100): cv.int_range(min=0, max=100),
+        cv.Optional(CONF_BUTTONS, default=True): cv.boolean,
     }
 )
 
@@ -83,7 +83,9 @@ async def to_code(config: dict) -> None:
 
     await adding_binary_sensors(var)
     await adding_numbers(var)
-    await adding_buttons(var)
+
+    if config[CONF_BUTTONS]:
+        await adding_buttons(var)
 
     adding_dependencies()
 
@@ -160,6 +162,10 @@ OPERATION_BASE_SCHEMA: Final = cv.Schema(
     }
 )
 
+BLEKeyboardReleaseAction = ble_keyboard_ns.class_(
+    ACTION_RELEASE_CLASS, automation.Action
+)
+
 
 @automation.register_action(
     f"{DOMAIN}.release",
@@ -181,6 +187,9 @@ async def ble_keyboard_release_to_code(
     paren: MockObj = await cg.get_variable(config[CONF_ID])
 
     return cg.new_Pvariable(action_id, template_arg, paren)
+
+
+BLEKeyboardPrintAction = ble_keyboard_ns.class_(ACTION_PRINT_CLASS, automation.Action)
 
 
 @automation.register_action(
@@ -215,6 +224,9 @@ async def ble_keyboard_print_to_code(
     return var
 
 
+BLEKeyboardPressAction = ble_keyboard_ns.class_(ACTION_PRESS_CLASS, automation.Action)
+
+
 @automation.register_action(
     f"{DOMAIN}.press",
     BLEKeyboardPressAction,
@@ -241,5 +253,45 @@ async def ble_keyboard_press_to_code(
     template_: LambdaExpression = await cg.templatable(config[CONF_CODE], args, int)
 
     cg.add(var.set_code(template_))
+
+    return var
+
+
+BLEKeyboardCombinationAction = ble_keyboard_ns.class_(
+    ACTION_COMBINATION_CLASS, automation.Action
+)
+
+
+@automation.register_action(
+    f"{DOMAIN}.combination",
+    BLEKeyboardCombinationAction,
+    OPERATION_BASE_SCHEMA.extend(
+        {
+            cv.Required(CONF_DELAY): cv.templatable(cv.positive_int),
+            cv.Required(CONF_KEYS): cv.All(
+                [cv.Any(cv.string_strict, cv.uint8_t)],
+                cv.Length(min=2, max=5),
+            ),
+        }
+    ),
+)
+async def ble_keyboard_combination_to_code(
+    config: dict, action_id: ID, template_arg: TemplateArguments, args: list
+) -> MockObj:
+    """Action combination
+
+    :param config: dict
+    :param action_id: ID
+    :param template_arg: TemplateArguments
+    :param args: list
+    :return: MockObj
+    """
+
+    paren: MockObj = await cg.get_variable(config[CONF_ID])
+    var: MockObj = cg.new_Pvariable(action_id, template_arg, paren)
+    template_: LambdaExpression = await cg.templatable(config[CONF_DELAY], args, int)
+
+    cg.add(var.set_delay(template_))
+    cg.add(var.set_keys([str(key) for key in config[CONF_KEYS]]))
 
     return var

@@ -33,6 +33,8 @@ from esphome.const import (
 DOMAIN: Final = "ble_keyboard"
 
 CONF_TEXT: Final = "text"
+CONF_KEYS: Final = "keys"
+CONF_BUTTONS: Final = "buttons"
 
 COMPONENT_CLASS: Final = "Esp32BleKeyboard"
 COMPONENT_NUMBER_CLASS: Final = "Esp32BleKeyboardNumber"
@@ -41,6 +43,7 @@ COMPONENT_BUTTON_CLASS: Final = "Esp32BleKeyboardButton"
 ACTION_PRINT_CLASS: Final = "Esp32BleKeyboardPrintAction"
 ACTION_PRESS_CLASS: Final = "Esp32BleKeyboardPressAction"
 ACTION_RELEASE_CLASS: Final = "Esp32BleKeyboardReleaseAction"
+ACTION_COMBINATION_CLASS: Final = "Esp32BleKeyboardCombinationAction"
 
 """Libraries"""
 LIBS: Final = [

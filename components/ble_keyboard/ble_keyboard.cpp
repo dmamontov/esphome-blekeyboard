@@ -50,16 +50,21 @@ void Esp32BleKeyboard::press(std::string message) {
   }
 }
 
-void Esp32BleKeyboard::press(uint8_t key) {
+void Esp32BleKeyboard::press(uint8_t key, bool with_timer) {
   if (this->is_connected()) {
-    this->update_timer();
+    if (with_timer) {
+      this->update_timer();
+    }
+
     bleKeyboard.press(key);
   }
 }
 
-void Esp32BleKeyboard::press(MediaKeyReport key) {
+void Esp32BleKeyboard::press(MediaKeyReport key, bool with_timer) {
   if (this->is_connected()) {
-    this->update_timer();
+    if (with_timer) {
+      this->update_timer();
+    }
     bleKeyboard.press(key);
   }
 }
