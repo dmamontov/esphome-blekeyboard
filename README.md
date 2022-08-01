@@ -19,6 +19,12 @@ Custom [esphome](https://esphome.io/) component to implement a virtual BLE keybo
   - [Default](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys#default)
   - [Media](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys#media)
 - [Entities](https://github.com/dmamontov/esphome-blekeyboard/wiki/Entities)
+- [Cookbook](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook)
+  - [Sending a simple message](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook#sending-a-simple-message)
+  - [Pressing the ENTER key](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook#pressing-the-enter-key)
+  - [Press CTRL + ALT + DELETE](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook#press-ctrl--alt--delete)
+  - [Press CTRL + A](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook#press-ctrl--a)
+  - [Lock an iPad](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook#lock-an-ipad)
 - [Example](blekeyboard.yaml)
 
 ## Supported OS
@@ -53,7 +59,7 @@ ble_keyboard:
 * **id** (Optional, string): Component ID. Needed for action;
 * **name** (Optional, string): Keyboard name (default: Esp32BleKeyboard);
 * **manufacturer_id** (Optional, string): Keyboard manufacturer (default: Esp32BleKeyboard);
-* **battery_level** (Optional, int): Keyboard battery level (default: 100).
+* **battery_level** (Optional, int): Keyboard battery level (default: 100);
 * **buttons** (Optional, bool): Whether to add separate buttons for [keys](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys) (default: true).
 
 ### Actions
@@ -107,4 +113,4 @@ ble_keyboard.combination:
 
 * **id** (Required, string): Component ID;
 * **delay** (Required, int): Delay between clicks;
-* **keys** (Required, list[int, string]): Key list;
+* **keys** (Required, list[int, string]): Key list.
