@@ -102,3 +102,15 @@ button:
             keys:
               - 0x80
               - "a"
+
+  - platform: template
+    name: "Calc"
+    id: key_calc
+    icon: "mdi:calculator"
+    on_press:
+      then:
+        - ble_keyboard.press:
+            id: my_ble_keyboard
+            code:
+              - 0
+              - 2
