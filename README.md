@@ -121,5 +121,5 @@ ble_keyboard.combination:
 ```
 
 * **id** (Required, string): Component ID;
-* **delay** (Required, int): Delay between clicks;
-* **keys** (Required, list[int, string]): [Key list](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys). Doesn't support lambda
+* **delay** (Required, int): Delay between clicks. Supports lambda;
+* **keys** (Required, list[int, string]): [Key list](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys). Doesn't support lambda.
