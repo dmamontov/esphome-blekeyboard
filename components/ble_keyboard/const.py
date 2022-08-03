@@ -49,14 +49,14 @@ ACTION_COMBINATION_CLASS: Final = "Esp32BleKeyboardCombinationAction"
 LIBS: Final = [
     ("ESP32 BLE Arduino", "1.0.1", None),
     (
-        "NimBLE-Arduino",
+        "h2zero/NimBLE-Arduino",
         "1.4.0",
-        "https://github.com/h2zero/NimBLE-Arduino/archive/refs/tags/1.4.0.zip",
+        None,
     ),
     (
-        "ESP32-BLE-Keyboard",
-        "0.3.2-beta",
-        "https://github.com/T-vK/ESP32-BLE-Keyboard/releases/download/0.3.2-beta/ESP32-BLE-Keyboard.zip",
+        "t-vk/ESP32 BLE Keyboard",
+        "0.3.2",
+        None,
     ),
 ]
 
