@@ -1,0 +1,125 @@
+# BLE Keyboard project
+# https://github.com/dmamontov/esphome-blekeyboard
+
+############# User configuration #############
+
+substitutions:
+
+  board: esp32-c3-devkitm-1
+  mdns_name: blekeyboard
+
+  # Wifi credentials
+  wifi_ssid: "mywifissid"
+  wifi_password: "miwifipassword"
+
+  # OTA and API
+  ota_password: "esphome"
+  api_password: "esphome"
+
+  # Software configuration
+  input_text_entity_id: "input_text.blekeyboard_new_message" # A string object for entering arbitrary text.
+
+
+########### End user configuration ###########
+
+
+############# Base configuration #############
+
+esphome:
+  name: $mdns_name
+  platformio_options:
+    board_build.mcu: esp32c3
+    board_build.flash_mode: dio
+    platform: https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream
+    platform_packages:
+      - framework-arduinoespressif32@https://github.com/espressif/arduino-esp32.git#2.0.2
+
+esp32:
+  board: $board
+  variant: esp32c3
+
+# Enable logging
+logger:
+
+# Enable OTA
+ota:
+  password: $ota_password
+
+# Enable WiFi
+wifi:
+  ssid: $wifi_ssid
+  password: $wifi_password
+  fast_connect: on
+
+# Enable Home Assistant API
+api:
+  password: $api_password
+
+########### End base configuration ###########
+
+# Enable components
+external_components:
+  - source:
+      type: local
+      path: ../components
+#  - source: github://dmamontov/esphome-blekeyboard
+
+ble_keyboard:
+  id: my_ble_keyboard
+  name: "MyBleKeyboard"
+  manufacturer_id: "Apple"
+  battery_level: 50
+  buttons: true
+  use_default_libs: false
+
+text_sensor:
+  - platform: homeassistant
+    id: input_text
+    entity_id: $input_text_entity_id
+    internal: true
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+
+button:
+  - platform: restart
+    entity_category: "config"
+    name: "Restart"
+
+  - platform: template
+    name: "Release"
+    id: key_release
+    icon: "mdi:send"
+    on_press:
+      then:
+        - ble_keyboard.print:
+            id: my_ble_keyboard
+            text: !lambda "return id(input_text).state;"
+        - ble_keyboard.release: my_ble_keyboard
+
+  - platform: template
+    name: "Ctrl + A"
+    id: key_ctrl_a
+    icon: "mdi:vector-combine"
+    on_press:
+      then:
+        - ble_keyboard.combination:
+            id: my_ble_keyboard
+            delay: 8
+            keys:
+              - 0x80
+              - "a"
+
+  - platform: template
+    name: "Calc"
+    id: key_calc
+    icon: "mdi:calculator"
+    on_press:
+      then:
+        - ble_keyboard.press:
+            id: my_ble_keyboard
+            code:
+              - 0
+              - 2
