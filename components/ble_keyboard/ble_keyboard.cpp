@@ -32,8 +32,6 @@ void Esp32BleKeyboard::update_timer() {
   this->set_timeout((const std::string) TAG, release_delay_, [this]() { this->release(); });
 }
 
-void Esp32BleKeyboard::set_delay(uint32_t delay_ms = 8) { bleKeyboard.setDelay(delay_ms); }
-
 void Esp32BleKeyboard::press(std::string message) {
   if (this->is_connected()) {
     if (message.length() >= 5) {

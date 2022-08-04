@@ -20,9 +20,10 @@ from esphome.const import (
     CONF_MIN_VALUE,
     CONF_NAME,
     CONF_STEP,
+    CONF_TYPE,
     CONF_VALUE,
 )
-from esphome.core import ID
+from esphome.core import CORE, ID
 from esphome.cpp_generator import LambdaExpression, MockObj, TemplateArguments
 
 from .const import (
@@ -39,11 +40,11 @@ from .const import (
     CONF_BUTTONS,
     CONF_KEYS,
     CONF_TEXT,
+    CONF_USE_DEFAULT_LIBS,
     DOMAIN,
-    LIBS,
-    NUMBER_BASE_DELAY,
-    NUMBER_PRESS_DELAY,
-    NUMBER_RELEASE_DELAY,
+    LIBS_ADDITIONAL,
+    LIBS_DEFAULT,
+    NUMBERS,
 )
 
 CODEOWNERS: Final = ["@dmamontov"]
@@ -61,6 +62,7 @@ CONFIG_SCHEMA: Final = cv.Schema(
         cv.Optional(CONF_NAME, default=COMPONENT_CLASS): cv.Length(min=1),
         cv.Optional(CONF_MANUFACTURER_ID, default=COMPONENT_CLASS): cv.Length(min=1),
         cv.Optional(CONF_BATTERY_LEVEL, default=100): cv.int_range(min=0, max=100),
+        cv.Optional(CONF_USE_DEFAULT_LIBS, default=True): cv.boolean,
         cv.Optional(CONF_BUTTONS, default=True): cv.boolean,
     }
 )
@@ -71,6 +73,12 @@ async def to_code(config: dict) -> None:
 
     :param config: dict
     """
+
+    if not CORE.is_esp32:
+        raise cv.Invalid("The component only supports ESP32.")
+
+    if not CORE.using_arduino:
+        raise cv.Invalid("The component only supports the Arduino framework.")
 
     var = cg.new_Pvariable(
         config[CONF_ID],
@@ -87,7 +95,7 @@ async def to_code(config: dict) -> None:
     if config[CONF_BUTTONS]:
         await adding_buttons(var)
 
-    adding_dependencies()
+    adding_dependencies(config[CONF_USE_DEFAULT_LIBS])
 
 
 async def adding_buttons(var: MockObj) -> None:
@@ -117,22 +125,20 @@ async def adding_numbers(var: MockObj) -> None:
     :param var: MockObj
     """
 
-    for num in [NUMBER_PRESS_DELAY, NUMBER_RELEASE_DELAY]:
-        data: dict = NUMBER_BASE_DELAY | {
-            CONF_ID: cv.declare_id(BLEKeyboardNumber)(f"{num}_delay"),
-            CONF_NAME: f"Delay {num}",
-        }
-
+    for num in NUMBERS:
         number_delay: MockObj = await number.new_number(
-            data,
-            min_value=data[CONF_MIN_VALUE],
-            max_value=data[CONF_MAX_VALUE],
-            step=data[CONF_STEP],
+            num
+            | {
+                CONF_ID: cv.declare_id(BLEKeyboardNumber)(num[CONF_ID]),
+            },
+            min_value=num[CONF_MIN_VALUE],
+            max_value=num[CONF_MAX_VALUE],
+            step=num[CONF_STEP],
         )
         cg.add(number_delay.set_parent(var))
-        cg.add(number_delay.set_initial_value(data[CONF_INITIAL_VALUE]))
-        if DOMAIN == NUMBER_PRESS_DELAY:
-            cg.add(number_delay.enable_press())
+        cg.add(number_delay.set_initial_value(num[CONF_INITIAL_VALUE]))
+        cg.add(number_delay.set_type(num[CONF_TYPE]))
+
         cg.add(number_delay.setup())
 
 
@@ -147,10 +153,17 @@ async def adding_binary_sensors(var: MockObj) -> None:
     )
 
 
-def adding_dependencies() -> None:
-    """Adding dependencies"""
+def adding_dependencies(use_default_libs: bool = True) -> None:
+    """Adding dependencies
 
-    for lib in LIBS:
+    :param use_default_libs: bool
+    """
+
+    if use_default_libs:
+        for lib in LIBS_DEFAULT:
+            cg.add_library(*lib)
+
+    for lib in LIBS_ADDITIONAL:
         cg.add_library(*lib)
 
     cg.add_build_flag(BUILD_FLAGS)

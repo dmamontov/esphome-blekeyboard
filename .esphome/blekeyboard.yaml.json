@@ -2,11 +2,11 @@
   "storage_version": 1,
   "name": "blekeyboard",
   "comment": null,
-  "esphome_version": "2022.6.2",
+  "esphome_version": "2022.7.0-dev",
   "src_version": 1,
   "address": "blekeyboard.local",
   "web_port": null,
-  "esp_platform": "ESP32",
+  "esp_platform": "ESP32C3",
   "build_path": ".esphome/build/blekeyboard",
   "firmware_bin_path": ".esphome/build/blekeyboard/.pioenvs/blekeyboard/firmware.bin",
   "loaded_integrations": [

@@ -21,10 +21,16 @@ void Esp32BleKeyboardNumber::setup() {
 }
 
 void Esp32BleKeyboardNumber::control(float value) {
-  if (is_press_) {
-    parent_->set_delay((uint32_t) value);
-  } else {
-    parent_->set_release_delay((uint32_t) value);
+  switch (type_) {
+    case 0:
+      parent_->set_delay((uint32_t) value);
+      break;
+    case 1:
+      parent_->set_release_delay((uint32_t) value);
+      break;
+    case 2:
+      parent_->set_battery_level((uint8_t) value);
+      break;
   }
 
   this->publish_state(value);

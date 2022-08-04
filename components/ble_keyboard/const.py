@@ -23,11 +23,13 @@ from esphome.const import (
     CONF_OPTIMISTIC,
     CONF_RESTORE_VALUE,
     CONF_STEP,
+    CONF_TYPE,
     CONF_UNIT_OF_MEASUREMENT,
     CONF_VALUE,
     DEVICE_CLASS_CONNECTIVITY,
     ENTITY_CATEGORY_CONFIG,
     UNIT_MILLISECOND,
+    UNIT_PERCENT,
 )
 
 DOMAIN: Final = "ble_keyboard"
@@ -35,6 +37,7 @@ DOMAIN: Final = "ble_keyboard"
 CONF_TEXT: Final = "text"
 CONF_KEYS: Final = "keys"
 CONF_BUTTONS: Final = "buttons"
+CONF_USE_DEFAULT_LIBS: Final = "use_default_libs"
 
 COMPONENT_CLASS: Final = "Esp32BleKeyboard"
 COMPONENT_NUMBER_CLASS: Final = "Esp32BleKeyboardNumber"
@@ -46,8 +49,11 @@ ACTION_RELEASE_CLASS: Final = "Esp32BleKeyboardReleaseAction"
 ACTION_COMBINATION_CLASS: Final = "Esp32BleKeyboardCombinationAction"
 
 """Libraries"""
-LIBS: Final = [
+LIBS_DEFAULT: Final = [
     ("ESP32 BLE Arduino", "1.0.1", None),
+]
+
+LIBS_ADDITIONAL: Final = [
     (
         "h2zero/NimBLE-Arduino",
         "1.4.0",
@@ -71,21 +77,58 @@ BINARY_SENSOR_STATE: Final = {
 }
 
 """Numbers"""
-NUMBER_BASE_DELAY: Final = {
-    CONF_DISABLED_BY_DEFAULT: False,
-    CONF_OPTIMISTIC: True,
-    CONF_MIN_VALUE: 1.0,
-    CONF_MAX_VALUE: 60000.0,
-    CONF_STEP: 1.0,
-    CONF_UNIT_OF_MEASUREMENT: UNIT_MILLISECOND,
-    CONF_RESTORE_VALUE: True,
-    CONF_INITIAL_VALUE: 8.0,
-    CONF_MODE: NumberMode.NUMBER_MODE_AUTO,
-    CONF_ENTITY_CATEGORY: cv.entity_category(ENTITY_CATEGORY_CONFIG),
-}
+TYPE_PRESS: Final = 0
+TYPE_RELEASE: Final = 1
+TYPE_BATTERY_LEVEL: Final = 2
 
-NUMBER_PRESS_DELAY: Final = "press"
-NUMBER_RELEASE_DELAY: Final = "release"
+NUMBERS: Final = [
+    {
+        CONF_ID: "press_delay",
+        CONF_NAME: "Delay press",
+        CONF_TYPE: TYPE_PRESS,
+        CONF_DISABLED_BY_DEFAULT: False,
+        CONF_OPTIMISTIC: True,
+        CONF_MIN_VALUE: 1.0,
+        CONF_MAX_VALUE: 60000.0,
+        CONF_STEP: 1.0,
+        CONF_UNIT_OF_MEASUREMENT: UNIT_MILLISECOND,
+        CONF_RESTORE_VALUE: True,
+        CONF_INITIAL_VALUE: 8.0,
+        CONF_MODE: NumberMode.NUMBER_MODE_AUTO,
+        CONF_ENTITY_CATEGORY: cv.entity_category(ENTITY_CATEGORY_CONFIG),
+    },
+    {
+        CONF_ID: "release_delay",
+        CONF_NAME: "Delay release",
+        CONF_TYPE: TYPE_RELEASE,
+        CONF_DISABLED_BY_DEFAULT: False,
+        CONF_OPTIMISTIC: True,
+        CONF_MIN_VALUE: 1.0,
+        CONF_MAX_VALUE: 60000.0,
+        CONF_STEP: 1.0,
+        CONF_UNIT_OF_MEASUREMENT: UNIT_MILLISECOND,
+        CONF_RESTORE_VALUE: True,
+        CONF_INITIAL_VALUE: 8.0,
+        CONF_MODE: NumberMode.NUMBER_MODE_AUTO,
+        CONF_ENTITY_CATEGORY: cv.entity_category(ENTITY_CATEGORY_CONFIG),
+    },
+    {
+        CONF_ID: "battery_level",
+        CONF_NAME: "Battery level",
+        CONF_ICON: "mdi:battery-bluetooth",
+        CONF_TYPE: TYPE_BATTERY_LEVEL,
+        CONF_DISABLED_BY_DEFAULT: False,
+        CONF_OPTIMISTIC: True,
+        CONF_MIN_VALUE: 1.0,
+        CONF_MAX_VALUE: 100.0,
+        CONF_STEP: 1.0,
+        CONF_UNIT_OF_MEASUREMENT: UNIT_PERCENT,
+        CONF_RESTORE_VALUE: True,
+        CONF_INITIAL_VALUE: 100.0,
+        CONF_MODE: NumberMode.NUMBER_MODE_AUTO,
+        CONF_ENTITY_CATEGORY: cv.entity_category(ENTITY_CATEGORY_CONFIG),
+    },
+]
 
 """Buttons"""
 BUTTONS_KEY: Final = [

@@ -19,8 +19,10 @@ class Esp32BleKeyboard : public PollingComponent {
 
   float get_setup_priority() const override { return setup_priority::AFTER_BLUETOOTH; }
 
-  void set_delay(uint32_t delay_ms);
-  void set_release_delay(uint32_t delay_ms) { release_delay_ = delay_ms; };
+  void set_delay(uint32_t delay_ms = 8) { bleKeyboard.setDelay(delay_ms); };
+  void set_release_delay(uint32_t delay_ms = 8) { release_delay_ = delay_ms; };
+  void set_battery_level(uint8_t level = 100) { bleKeyboard.setBatteryLevel(level); };
+
   void set_state_sensor(binary_sensor::BinarySensor *state_sensor) { state_sensor_ = state_sensor; }
 
   void press(std::string message);
