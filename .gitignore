@@ -3,3 +3,4 @@ blekeyboard/
 __pycache__
 .mypy_cache
 .esphome
+components/ble_keyboard/__pycache__
