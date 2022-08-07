@@ -84,6 +84,26 @@ template<typename... Ts> class Esp32BleKeyboardCombinationAction : public Action
     return !s.empty() && std::find_if(s.begin(), s.end(), [](unsigned char c) { return !std::isdigit(c); }) == s.end();
   }
 };
+
+template<typename... Ts> class Esp32BleKeyboardStartAction : public Action<Ts...> {
+ public:
+  explicit Esp32BleKeyboardStartAction(Esp32BleKeyboard *ble_keyboard) : ble_keyboard_(ble_keyboard) {}
+
+  void play(Ts... x) override { this->ble_keyboard_->start(); }
+
+ protected:
+  Esp32BleKeyboard *ble_keyboard_;
+};
+
+template<typename... Ts> class Esp32BleKeyboardStopAction : public Action<Ts...> {
+ public:
+  explicit Esp32BleKeyboardStopAction(Esp32BleKeyboard *ble_keyboard) : ble_keyboard_(ble_keyboard) {}
+
+  void play(Ts... x) override { this->ble_keyboard_->stop(); }
+
+ protected:
+  Esp32BleKeyboard *ble_keyboard_;
+};
 }  // namespace ble_keyboard
 }  // namespace esphome
 

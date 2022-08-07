@@ -53,13 +53,14 @@ api:
 external_components:
   - source:
       type: local
-      path: components
+      path: ../components
 #  - source: github://dmamontov/esphome-blekeyboard
 
 ble_keyboard:
   id: my_ble_keyboard
   name: "MyBleKeyboard"
   manufacturer_id: "Apple"
+  reconnect: true
   battery_level: 50
   buttons: true
 
@@ -114,3 +115,19 @@ button:
             code:
               - 0
               - 2
+
+  - platform: template
+    name: "Start advertising"
+    id: start_advertising
+    icon: "mdi:play"
+    on_press:
+      then:
+        - ble_keyboard.start: my_ble_keyboard
+
+  - platform: template
+    name: "Stop advertising"
+    id: stop_advertising
+    icon: "mdi:stop"
+    on_press:
+      then:
+        - ble_keyboard.stop: my_ble_keyboard
