@@ -27,7 +27,7 @@ Custom [esphome](https://esphome.io/) component to implement a virtual BLE keybo
   - [Press CTRL + ALT + DELETE](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook#press-ctrl--alt--delete)
   - [Press CTRL + A](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook#press-ctrl--a)
   - [Lock an iPad](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook#lock-an-ipad)
-- [Example](examples)
+- [Examples](examples)
   - [esp32](examples/esp32.yaml)
   - [esp32c3](examples/esp32c3.yaml)
 
@@ -39,6 +39,10 @@ Custom [esphome](https://esphome.io/) component to implement a virtual BLE keybo
 | Android | Fully supported         |
 | MacOS   | It does not work stably |
 | IOS     | It does not work stably |
+
+## Requirements
+* **Board**: esp32, esp32s2, esp32s3, esp32c3 and esp32h2;
+* **Framework**: arduino.
 
 ## Base configuration
 
