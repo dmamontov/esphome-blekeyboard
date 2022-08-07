@@ -10,8 +10,10 @@ on:
 jobs:
   lint:
     runs-on: "ubuntu-latest"
-    matrix:
-      platform: [ 'esp32', 'esp32c3' ]
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ 'esp32', 'esp32c3' ]
     steps:
       - uses: actions/checkout@v2
       - uses: dmamontov/esphome-lint@main
