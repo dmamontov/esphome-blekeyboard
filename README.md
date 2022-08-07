@@ -41,11 +41,11 @@ Custom [esphome](https://esphome.io/) component to implement a virtual BLE keybo
 | MacOS   | It does not work stably |
 | IOS     | It does not work stably |
 
-## Requirements
+## Base configuration
+
+### Requirements
 * **Board**: esp32, esp32s2, esp32s3, esp32c3 and esp32h2;
 * **Framework**: arduino.
-
-## Base configuration
 
 ### Adding a component
 
