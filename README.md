@@ -7,6 +7,7 @@ Custom [esphome](https://esphome.io/) component to implement a virtual BLE keybo
 ## More info
 
 - [Base configuration](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration)
+  - [Requirements](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#requirements)
   - [Adding a component](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#adding-a-component)
   - [Configuration](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#configuration)
   - [Actions](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#actions)
