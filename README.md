@@ -14,6 +14,8 @@ Custom [esphome](https://esphome.io/) component to implement a virtual BLE keybo
     - [ble_keyboard.press](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardpress)
     - [ble_keyboard.release](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardrelease)
     - [ble_keyboard.combination](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardcombination)
+    - [ble_keyboard.start](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardstart)
+    - [ble_keyboard.stop](https://github.com/dmamontov/esphome-blekeyboard/wiki/Base-configuration#ble_keyboardstop)
 - [Supported OS](https://github.com/dmamontov/esphome-blekeyboard/wiki/Supported-OS)
 - [Keys](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys)
   - [Default](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys#default)
@@ -25,7 +27,9 @@ Custom [esphome](https://esphome.io/) component to implement a virtual BLE keybo
   - [Press CTRL + ALT + DELETE](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook#press-ctrl--alt--delete)
   - [Press CTRL + A](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook#press-ctrl--a)
   - [Lock an iPad](https://github.com/dmamontov/esphome-blekeyboard/wiki/Cookbook#lock-an-ipad)
-- [Example](blekeyboard.yaml)
+- [Example](examples)
+  - [esp32](examples/esp32.yaml)
+  - [esp32c3](examples/esp32c3.yaml)
 
 ## Supported OS
 | OS      | Description             |
@@ -53,14 +57,18 @@ ble_keyboard:
   name: "MamonTechKeyboard"
   manufacturer_id: "MamonTech"
   battery_level: 50
+  reconnect: true
   buttons: true
+  use_default_libs: true
 ```
 
 * **id** (Optional, string): Component ID. Needed for action;
 * **name** (Optional, string): Keyboard name (default: Esp32BleKeyboard);
 * **manufacturer_id** (Optional, string): Keyboard manufacturer (default: Esp32BleKeyboard);
 * **battery_level** (Optional, int): Keyboard battery level (default: 100);
-* **buttons** (Optional, bool): Whether to add separate buttons for [keys](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys) (default: true).
+* **reconnect** (Optional, bool): Automatic reconnect service after disconnecting the device. (default: true);
+* **buttons** (Optional, bool): Whether to add separate buttons for [keys](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys) (default: true);
+* **use_default_libs** (Optional, bool): Whether to use the arduino standard library. In recent versions of frameworks, they come by default. Actual for esp32s2, esp32s3, esp32c3 and esp32h2. (default: true).
 
 ### Actions
 
@@ -123,3 +131,19 @@ ble_keyboard.combination:
 * **id** (Required, string): Component ID;
 * **delay** (Required, int): Delay between clicks. Supports lambda;
 * **keys** (Required, list[int, string]): [Key list](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys). Doesn't support lambda.
+
+#### ble_keyboard.start
+
+Start advertising.
+
+```yaml
+ble_keyboard.start: my_ble_keyboard
+```
+
+#### ble_keyboard.stop
+
+Stop advertising and disable customers.
+
+```yaml
+ble_keyboard.stop: my_ble_keyboard
+```

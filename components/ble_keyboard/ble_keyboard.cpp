@@ -2,7 +2,13 @@
 
 #include "ble_keyboard.h"
 #include "esphome/core/log.h"
+#include <NimBLEServer.h>
+#include <NimBLEDevice.h>
+#include <NimBLEService.h>
+#include <NimBLECharacteristic.h>
+#include <NimBLEAdvertising.h>
 #include <string>
+#include <list>
 
 namespace esphome {
 namespace ble_keyboard {
@@ -12,7 +18,36 @@ void Esp32BleKeyboard::setup() {
   ESP_LOGI(TAG, "Setting up...");
 
   bleKeyboard.begin();
+
+  pServer = BLEDevice::getServer();
+
+  pServer->advertiseOnDisconnect(this->reconnect_);
+
   bleKeyboard.releaseAll();
+}
+
+void Esp32BleKeyboard::stop() {
+  if (this->reconnect_) {
+    pServer->advertiseOnDisconnect(false);
+  }
+
+  std::vector<uint16_t> ids = pServer->getPeerDevices();
+
+  if (ids.size() > 0) {
+    for (uint16_t &id : ids) {
+      pServer->disconnect(id);
+    }
+  } else {
+    pServer->stopAdvertising();
+  }
+}
+
+void Esp32BleKeyboard::start() {
+  if (this->reconnect_) {
+    pServer->advertiseOnDisconnect(true);
+  }
+
+  pServer->startAdvertising();
 }
 
 void Esp32BleKeyboard::update() { state_sensor_->publish_state(bleKeyboard.isConnected()); }

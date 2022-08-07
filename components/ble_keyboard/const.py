@@ -36,6 +36,7 @@ DOMAIN: Final = "ble_keyboard"
 
 CONF_TEXT: Final = "text"
 CONF_KEYS: Final = "keys"
+CONF_RECONNECT: Final = "reconnect"
 CONF_BUTTONS: Final = "buttons"
 CONF_USE_DEFAULT_LIBS: Final = "use_default_libs"
 
@@ -43,6 +44,8 @@ COMPONENT_CLASS: Final = "Esp32BleKeyboard"
 COMPONENT_NUMBER_CLASS: Final = "Esp32BleKeyboardNumber"
 COMPONENT_BUTTON_CLASS: Final = "Esp32BleKeyboardButton"
 
+ACTION_START_CLASS: Final = "Esp32BleKeyboardStartAction"
+ACTION_STOP_CLASS: Final = "Esp32BleKeyboardStopAction"
 ACTION_PRINT_CLASS: Final = "Esp32BleKeyboardPrintAction"
 ACTION_PRESS_CLASS: Final = "Esp32BleKeyboardPressAction"
 ACTION_RELEASE_CLASS: Final = "Esp32BleKeyboardReleaseAction"

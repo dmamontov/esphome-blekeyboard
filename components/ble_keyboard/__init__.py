@@ -31,6 +31,8 @@ from .const import (
     ACTION_PRESS_CLASS,
     ACTION_PRINT_CLASS,
     ACTION_RELEASE_CLASS,
+    ACTION_START_CLASS,
+    ACTION_STOP_CLASS,
     BINARY_SENSOR_STATE,
     BUILD_FLAGS,
     BUTTONS_KEY,
@@ -39,6 +41,7 @@ from .const import (
     COMPONENT_NUMBER_CLASS,
     CONF_BUTTONS,
     CONF_KEYS,
+    CONF_RECONNECT,
     CONF_TEXT,
     CONF_USE_DEFAULT_LIBS,
     DOMAIN,
@@ -62,6 +65,7 @@ CONFIG_SCHEMA: Final = cv.Schema(
         cv.Optional(CONF_NAME, default=COMPONENT_CLASS): cv.Length(min=1),
         cv.Optional(CONF_MANUFACTURER_ID, default=COMPONENT_CLASS): cv.Length(min=1),
         cv.Optional(CONF_BATTERY_LEVEL, default=100): cv.int_range(min=0, max=100),
+        cv.Optional(CONF_RECONNECT, default=True): cv.boolean,
         cv.Optional(CONF_USE_DEFAULT_LIBS, default=True): cv.boolean,
         cv.Optional(CONF_BUTTONS, default=True): cv.boolean,
     }
@@ -85,6 +89,7 @@ async def to_code(config: dict) -> None:
         config[CONF_NAME],
         config[CONF_MANUFACTURER_ID],
         config[CONF_BATTERY_LEVEL],
+        config[CONF_RECONNECT],
     )
 
     await cg.register_component(var, config)
@@ -163,7 +168,7 @@ def adding_dependencies(use_default_libs: bool = True) -> None:
         for lib in LIBS_DEFAULT:
             cg.add_library(*lib)
 
-    for lib in LIBS_ADDITIONAL:
+    for lib in LIBS_ADDITIONAL:  # type: ignore
         cg.add_library(*lib)
 
     cg.add_build_flag(BUILD_FLAGS)
@@ -318,3 +323,53 @@ async def ble_keyboard_combination_to_code(
     cg.add(var.set_keys([str(key) for key in config[CONF_KEYS]]))
 
     return var
+
+
+BLEKeyboardStartAction = ble_keyboard_ns.class_(ACTION_START_CLASS, automation.Action)
+
+
+@automation.register_action(
+    f"{DOMAIN}.start",
+    BLEKeyboardStartAction,
+    maybe_simple_id(OPERATION_BASE_SCHEMA),
+)
+async def ble_keyboard_start_to_code(
+    config: dict, action_id: ID, template_arg: TemplateArguments, args: list
+) -> MockObj:
+    """Action start
+
+    :param config: dict
+    :param action_id: ID
+    :param template_arg: TemplateArguments
+    :param args: list
+    :return: MockObj
+    """
+
+    paren: MockObj = await cg.get_variable(config[CONF_ID])
+
+    return cg.new_Pvariable(action_id, template_arg, paren)
+
+
+BLEKeyboardStopAction = ble_keyboard_ns.class_(ACTION_STOP_CLASS, automation.Action)
+
+
+@automation.register_action(
+    f"{DOMAIN}.stop",
+    BLEKeyboardStopAction,
+    maybe_simple_id(OPERATION_BASE_SCHEMA),
+)
+async def ble_keyboard_stop_to_code(
+    config: dict, action_id: ID, template_arg: TemplateArguments, args: list
+) -> MockObj:
+    """Action stop
+
+    :param config: dict
+    :param action_id: ID
+    :param template_arg: TemplateArguments
+    :param args: list
+    :return: MockObj
+    """
+
+    paren: MockObj = await cg.get_variable(config[CONF_ID])
+
+    return cg.new_Pvariable(action_id, template_arg, paren)
