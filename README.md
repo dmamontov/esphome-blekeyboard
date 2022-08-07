@@ -31,6 +31,7 @@ Custom [esphome](https://esphome.io/) component to implement a virtual BLE keybo
 - [Examples](examples)
   - [esp32](examples/esp32.yaml)
   - [esp32c3](examples/esp32c3.yaml)
+- [Credits](https://github.com/dmamontov/esphome-blekeyboard/wiki/Credits)
 
 ## Supported OS
 | OS      | Description             |
@@ -152,3 +153,8 @@ Stop advertising and disable customers.
 ```yaml
 ble_keyboard.stop: my_ble_keyboard
 ```
+
+## Credits
+* Thanks to all [ESPHome](https://github.com/esphome/esphome) contributors;
+* Thanks to [@T-vK](https://github.com/T-vK) for the [ESP32-BLE-Keyboard](https://github.com/T-vK/ESP32-BLE-Keyboard) library;
+* Thanks to [@h2zero](https://github.com/h2zero) for the [NimBLE-Arduino](https://github.com/h2zero/NimBLE-Arduino) library.
