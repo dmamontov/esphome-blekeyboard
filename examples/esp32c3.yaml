@@ -27,6 +27,7 @@ substitutions:
 
 esphome:
   name: $mdns_name
+  comment: "https://github.com/dmamontov/esphome-blekeyboard"
   platformio_options:
     board_build.mcu: esp32c3
     board_build.flash_mode: dio

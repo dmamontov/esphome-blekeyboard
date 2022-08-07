@@ -29,6 +29,7 @@ esphome:
   name: $mdns_name
   platform: ESP32
   board: $board
+  comment: "https://github.com/dmamontov/esphome-blekeyboard"
 
 # Enable logging
 logger:
