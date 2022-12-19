@@ -65,7 +65,7 @@ ble_keyboard:
   battery_level: 50
   reconnect: true
   buttons: true
-  use_default_libs: true
+  use_default_libs: false
 ```
 
 * **id** (Optional, string): Component ID. Needed for action;
@@ -74,7 +74,7 @@ ble_keyboard:
 * **battery_level** (Optional, int): Keyboard battery level (default: 100);
 * **reconnect** (Optional, bool): Automatic reconnect service after disconnecting the device. (default: true);
 * **buttons** (Optional, bool): Whether to add separate buttons for [keys](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys) (default: true);
-* **use_default_libs** (Optional, bool): Whether to use the arduino standard library. In recent versions of frameworks, they come by default. Actual for esp32s2, esp32s3, esp32c3 and esp32h2. (default: true).
+* **use_default_libs** (Optional, bool): Whether to use the arduino standard library. (default: false).
 
 ### Actions
 

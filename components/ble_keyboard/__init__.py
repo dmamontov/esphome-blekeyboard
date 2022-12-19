@@ -66,7 +66,7 @@ CONFIG_SCHEMA: Final = cv.Schema(
         cv.Optional(CONF_MANUFACTURER_ID, default=COMPONENT_CLASS): cv.Length(min=1),
         cv.Optional(CONF_BATTERY_LEVEL, default=100): cv.int_range(min=0, max=100),
         cv.Optional(CONF_RECONNECT, default=True): cv.boolean,
-        cv.Optional(CONF_USE_DEFAULT_LIBS, default=True): cv.boolean,
+        cv.Optional(CONF_USE_DEFAULT_LIBS, default=False): cv.boolean,
         cv.Optional(CONF_BUTTONS, default=True): cv.boolean,
     }
 )

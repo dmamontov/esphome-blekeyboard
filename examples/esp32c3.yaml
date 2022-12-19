@@ -72,7 +72,6 @@ ble_keyboard:
   reconnect: true
   battery_level: 50
   buttons: true
-  use_default_libs: false
 
 text_sensor:
   - platform: homeassistant
