@@ -115,10 +115,27 @@ ble_keyboard.press:
 
 #### ble_keyboard.release
 
-Release keys.
+Release all keys.
 
 ```yaml
-ble_keyboard.release: my_ble_keyboard
+ble_keyboard.release: 
+  id: my_ble_keyboard
+```
+
+Release a specific Key
+```yaml
+ble_keyboard.release
+  id: my_ble_keyboard
+  code: 0x80
+```
+
+Release a specific media Key
+```yaml
+ble_keyboard.release
+  id: my_ble_keyboard
+  code: 
+    - 0
+    - 1
 ```
 
 #### ble_keyboard.combination

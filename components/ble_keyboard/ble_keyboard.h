@@ -31,6 +31,8 @@ class Esp32BleKeyboard : public PollingComponent {
   void press(std::string message);
   void press(uint8_t key, bool with_timer = true);
   void press(MediaKeyReport key, bool with_timer = true);
+  void release(uint8_t key);
+  void release(MediaKeyReport key);
   void release();
 
   void start();
