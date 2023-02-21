@@ -188,7 +188,17 @@ BLEKeyboardReleaseAction = ble_keyboard_ns.class_(
 @automation.register_action(
     f"{DOMAIN}.release",
     BLEKeyboardReleaseAction,
-    maybe_simple_id(OPERATION_BASE_SCHEMA),
+    OPERATION_BASE_SCHEMA.extend(
+        {
+            cv.Optional(CONF_CODE): cv.Any(
+                cv.templatable(cv.positive_int),
+                cv.All(
+                    [cv.uint8_t],
+                    cv.Length(min=2, max=2),
+                ),
+            ),
+        }
+    ),
 )
 async def ble_keyboard_release_to_code(
     config: dict, action_id: ID, template_arg: TemplateArguments, args: list
@@ -203,8 +213,15 @@ async def ble_keyboard_release_to_code(
     """
 
     paren: MockObj = await cg.get_variable(config[CONF_ID])
+    var: MockObj = cg.new_Pvariable(action_id, template_arg, paren)
+    if CONF_CODE in config:
+        if isinstance(config[CONF_CODE], list):
+            cg.add(var.set_keys(config[CONF_CODE]))
+        else:
+            template_: LambdaExpression = await cg.templatable(config[CONF_CODE], args, int)
+            cg.add(var.set_code(template_))
 
-    return cg.new_Pvariable(action_id, template_arg, paren)
+    return var
 
 
 BLEKeyboardPrintAction = ble_keyboard_ns.class_(ACTION_PRINT_CLASS, automation.Action)

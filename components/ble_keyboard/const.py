@@ -53,7 +53,7 @@ ACTION_COMBINATION_CLASS: Final = "Esp32BleKeyboardCombinationAction"
 
 """Libraries"""
 LIBS_DEFAULT: Final = [
-    ("ESP32 BLE Arduino", "1.0.1", None),
+    ("ESP32 BLE Arduino", "1.0.2", None),
 ]
 
 LIBS_ADDITIONAL: Final = [
