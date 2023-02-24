@@ -30,6 +30,9 @@ from esphome.const import (
     DEVICE_CLASS_CONNECTIVITY,
     DEVICE_CLASS_SIGNAL_STRENGTH,
     ENTITY_CATEGORY_CONFIG,
+    ENTITY_CATEGORY_DIAGNOSTIC,
+    STATE_CLASS_MEASUREMENT,
+    UNIT_DECIBEL_MILLIWATT,
     UNIT_MILLISECOND,
     UNIT_PERCENT,
 )
@@ -41,6 +44,7 @@ CONF_KEYS: Final = "keys"
 CONF_RECONNECT: Final = "reconnect"
 CONF_BUTTONS: Final = "buttons"
 CONF_USE_DEFAULT_LIBS: Final = "use_default_libs"
+CONF_RSSI: Final = "rssi"
 
 COMPONENT_CLASS: Final = "Esp32BleKeyboard"
 COMPONENT_NUMBER_CLASS: Final = "Esp32BleKeyboardNumber"
@@ -82,8 +86,21 @@ BINARY_SENSOR_STATE: Final = {
 }
 
 """Sensors"""
+RSSI_SENSOR_SCHEMA: Final = sensor.sensor_schema(
+            accuracy_decimals=0,
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+            state_class=STATE_CLASS_MEASUREMENT,
+            device_class=DEVICE_CLASS_SIGNAL_STRENGTH,
+            unit_of_measurement=UNIT_DECIBEL_MILLIWATT,
+        ).extend(
+            {
+                cv.Optional(CONF_NAME, default="RSSI"): cv.string,
+                cv.Optional(CONF_DISABLED_BY_DEFAULT, default=True): cv.boolean,
+            }
+        )
+
 RSSI_SENSOR_STATE: Final = {
-    CONF_ID: cv.declare_id(sensor.Sensor)("rssi"),
+    CONF_ID: cv.declare_id(sensor.Sensor)(CONF_RSSI),
     CONF_NAME: "RSSI",
     CONF_DEVICE_CLASS: DEVICE_CLASS_SIGNAL_STRENGTH,
     CONF_DISABLED_BY_DEFAULT: True,

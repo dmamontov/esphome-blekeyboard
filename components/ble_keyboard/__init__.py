@@ -45,10 +45,12 @@ from .const import (
     CONF_RECONNECT,
     CONF_TEXT,
     CONF_USE_DEFAULT_LIBS,
+    CONF_RSSI,
     DOMAIN,
     LIBS_ADDITIONAL,
     LIBS_DEFAULT,
     NUMBERS,
+    RSSI_SENSOR_SCHEMA,
 )
 
 CODEOWNERS: Final = ["@dmamontov"]
@@ -69,6 +71,7 @@ CONFIG_SCHEMA: Final = cv.Schema(
         cv.Optional(CONF_RECONNECT, default=True): cv.boolean,
         cv.Optional(CONF_USE_DEFAULT_LIBS, default=False): cv.boolean,
         cv.Optional(CONF_BUTTONS, default=True): cv.boolean,
+        cv.Optional(CONF_RSSI): RSSI_SENSOR_SCHEMA,
     }
 )
 
@@ -97,7 +100,7 @@ async def to_code(config: dict) -> None:
 
     await adding_binary_sensors(var)
     await adding_numbers(var)
-    await adding_sensors(var)
+    await adding_sensors(var, config)
 
     if config[CONF_BUTTONS]:
         await adding_buttons(var)
@@ -159,15 +162,21 @@ async def adding_binary_sensors(var: MockObj) -> None:
         var.set_state_sensor(await binary_sensor.new_binary_sensor(BINARY_SENSOR_STATE))
     )
 
-async def adding_sensors(var: MockObj) -> None:
-    """Adding sensor
+async def adding_sensors(var: MockObj, config: dict) -> None:
+    """Adding sensors
 
     :param var: MockObj
     """
 
-    cg.add(
-        var.set_rssi_sensor(await sensor.new_sensor(RSSI_SENSOR_STATE))
-    )
+    
+    if CONF_RSSI in config:
+        cg.add(
+            var.set_rssi_sensor(await sensor.new_sensor(config[CONF_RSSI]))
+        )
+    else:
+        cg.add(
+            var.set_rssi_sensor(await sensor.new_sensor(RSSI_SENSOR_STATE))
+        )
 
 def adding_dependencies(use_default_libs: bool = True) -> None:
     """Adding dependencies
