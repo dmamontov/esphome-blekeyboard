@@ -8,7 +8,7 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome import automation
 from esphome.automation import maybe_simple_id
-from esphome.components import binary_sensor, button, number
+from esphome.components import binary_sensor, button, number, sensor
 from esphome.const import (
     CONF_BATTERY_LEVEL,
     CONF_CODE,
@@ -34,6 +34,7 @@ from .const import (
     ACTION_START_CLASS,
     ACTION_STOP_CLASS,
     BINARY_SENSOR_STATE,
+    RSSI_SENSOR_STATE,
     BUILD_FLAGS,
     BUTTONS_KEY,
     COMPONENT_BUTTON_CLASS,
@@ -51,7 +52,7 @@ from .const import (
 )
 
 CODEOWNERS: Final = ["@dmamontov"]
-AUTO_LOAD: Final = ["binary_sensor", "number", "button"]
+AUTO_LOAD: Final = ["binary_sensor", "number", "button", "sensor"]
 
 ble_keyboard_ns = cg.esphome_ns.namespace(DOMAIN)
 
@@ -96,6 +97,7 @@ async def to_code(config: dict) -> None:
 
     await adding_binary_sensors(var)
     await adding_numbers(var)
+    await adding_sensors(var)
 
     if config[CONF_BUTTONS]:
         await adding_buttons(var)
@@ -157,6 +159,15 @@ async def adding_binary_sensors(var: MockObj) -> None:
         var.set_state_sensor(await binary_sensor.new_binary_sensor(BINARY_SENSOR_STATE))
     )
 
+async def adding_sensors(var: MockObj) -> None:
+    """Adding sensor
+
+    :param var: MockObj
+    """
+
+    cg.add(
+        var.set_rssi_sensor(await sensor.new_sensor(RSSI_SENSOR_STATE))
+    )
 
 def adding_dependencies(use_default_libs: bool = True) -> None:
     """Adding dependencies

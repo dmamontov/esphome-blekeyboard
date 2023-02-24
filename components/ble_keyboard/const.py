@@ -7,12 +7,13 @@ from __future__ import annotations
 from typing import Final
 
 import esphome.config_validation as cv
-from esphome.components import binary_sensor
+from esphome.components import binary_sensor, sensor
 from esphome.components.number import NumberMode
 from esphome.const import (
     CONF_DEVICE_CLASS,
     CONF_DISABLED_BY_DEFAULT,
     CONF_ENTITY_CATEGORY,
+    CONF_FORCE_UPDATE,
     CONF_ICON,
     CONF_ID,
     CONF_INITIAL_VALUE,
@@ -27,6 +28,7 @@ from esphome.const import (
     CONF_UNIT_OF_MEASUREMENT,
     CONF_VALUE,
     DEVICE_CLASS_CONNECTIVITY,
+    DEVICE_CLASS_SIGNAL_STRENGTH,
     ENTITY_CATEGORY_CONFIG,
     UNIT_MILLISECOND,
     UNIT_PERCENT,
@@ -77,6 +79,15 @@ BINARY_SENSOR_STATE: Final = {
     CONF_NAME: "Connected",
     CONF_DEVICE_CLASS: DEVICE_CLASS_CONNECTIVITY,
     CONF_DISABLED_BY_DEFAULT: False,
+}
+
+"""Sensors"""
+RSSI_SENSOR_STATE: Final = {
+    CONF_ID: cv.declare_id(sensor.Sensor)("rssi"),
+    CONF_NAME: "RSSI",
+    CONF_DEVICE_CLASS: DEVICE_CLASS_SIGNAL_STRENGTH,
+    CONF_DISABLED_BY_DEFAULT: True,
+    CONF_FORCE_UPDATE: False,
 }
 
 """Numbers"""
