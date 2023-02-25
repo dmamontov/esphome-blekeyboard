@@ -99,14 +99,6 @@ RSSI_SENSOR_SCHEMA: Final = sensor.sensor_schema(
             }
         )
 
-RSSI_SENSOR_STATE: Final = {
-    CONF_ID: cv.declare_id(sensor.Sensor)(CONF_RSSI),
-    CONF_NAME: "RSSI",
-    CONF_DEVICE_CLASS: DEVICE_CLASS_SIGNAL_STRENGTH,
-    CONF_DISABLED_BY_DEFAULT: True,
-    CONF_FORCE_UPDATE: False,
-}
-
 """Numbers"""
 TYPE_PRESS: Final = 0
 TYPE_RELEASE: Final = 1

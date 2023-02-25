@@ -34,7 +34,6 @@ from .const import (
     ACTION_START_CLASS,
     ACTION_STOP_CLASS,
     BINARY_SENSOR_STATE,
-    RSSI_SENSOR_STATE,
     BUILD_FLAGS,
     BUTTONS_KEY,
     COMPONENT_BUTTON_CLASS,
@@ -172,10 +171,6 @@ async def adding_sensors(var: MockObj, config: dict) -> None:
     if CONF_RSSI in config:
         cg.add(
             var.set_rssi_sensor(await sensor.new_sensor(config[CONF_RSSI]))
-        )
-    else:
-        cg.add(
-            var.set_rssi_sensor(await sensor.new_sensor(RSSI_SENSOR_STATE))
         )
 
 def adding_dependencies(use_default_libs: bool = True) -> None:

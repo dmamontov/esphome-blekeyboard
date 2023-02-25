@@ -40,7 +40,7 @@ class Esp32BleKeyboard : public PollingComponent {
 
  protected:
   binary_sensor::BinarySensor *state_sensor_;
-  sensor::Sensor *rssi_sensor_;
+  sensor::Sensor *rssi_sensor_{nullptr};
 
  private:
   bool is_connected();

@@ -50,7 +50,9 @@ void Esp32BleKeyboard::start() {
   pServer->startAdvertising();
 }
 
-void Esp32BleKeyboard::update() { state_sensor_->publish_state(bleKeyboard.isConnected());
+void Esp32BleKeyboard::update() {
+  state_sensor_->publish_state(bleKeyboard.isConnected());
+  if (rssi_sensor_ == nullptr) return;
   if (bleKeyboard.isConnected()) {
       std::vector<uint16_t> ids = pServer->getPeerDevices();
 
