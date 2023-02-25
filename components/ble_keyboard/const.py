@@ -7,12 +7,13 @@ from __future__ import annotations
 from typing import Final
 
 import esphome.config_validation as cv
-from esphome.components import binary_sensor
+from esphome.components import binary_sensor, sensor
 from esphome.components.number import NumberMode
 from esphome.const import (
     CONF_DEVICE_CLASS,
     CONF_DISABLED_BY_DEFAULT,
     CONF_ENTITY_CATEGORY,
+    CONF_FORCE_UPDATE,
     CONF_ICON,
     CONF_ID,
     CONF_INITIAL_VALUE,
@@ -27,7 +28,11 @@ from esphome.const import (
     CONF_UNIT_OF_MEASUREMENT,
     CONF_VALUE,
     DEVICE_CLASS_CONNECTIVITY,
+    DEVICE_CLASS_SIGNAL_STRENGTH,
     ENTITY_CATEGORY_CONFIG,
+    ENTITY_CATEGORY_DIAGNOSTIC,
+    STATE_CLASS_MEASUREMENT,
+    UNIT_DECIBEL_MILLIWATT,
     UNIT_MILLISECOND,
     UNIT_PERCENT,
 )
@@ -39,6 +44,7 @@ CONF_KEYS: Final = "keys"
 CONF_RECONNECT: Final = "reconnect"
 CONF_BUTTONS: Final = "buttons"
 CONF_USE_DEFAULT_LIBS: Final = "use_default_libs"
+CONF_RSSI: Final = "rssi"
 
 COMPONENT_CLASS: Final = "Esp32BleKeyboard"
 COMPONENT_NUMBER_CLASS: Final = "Esp32BleKeyboardNumber"
@@ -78,6 +84,19 @@ BINARY_SENSOR_STATE: Final = {
     CONF_DEVICE_CLASS: DEVICE_CLASS_CONNECTIVITY,
     CONF_DISABLED_BY_DEFAULT: False,
 }
+
+"""Sensors"""
+RSSI_SENSOR_SCHEMA: Final = sensor.sensor_schema(
+            accuracy_decimals=0,
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+            state_class=STATE_CLASS_MEASUREMENT,
+            device_class=DEVICE_CLASS_SIGNAL_STRENGTH,
+            unit_of_measurement=UNIT_DECIBEL_MILLIWATT,
+        ).extend(
+            {
+                cv.Optional(CONF_NAME, default="RSSI"): cv.string,
+            }
+        )
 
 """Numbers"""
 TYPE_PRESS: Final = 0

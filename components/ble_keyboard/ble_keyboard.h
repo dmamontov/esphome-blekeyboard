@@ -4,6 +4,7 @@
 
 #include "esphome/core/component.h"
 #include "esphome/components/binary_sensor/binary_sensor.h"
+#include "esphome/components/sensor/sensor.h"
 #include <NimBLEServer.h>
 #include <BleKeyboard.h>
 #include <string>
@@ -27,6 +28,7 @@ class Esp32BleKeyboard : public PollingComponent {
   void set_battery_level(uint8_t level = 100) { bleKeyboard.setBatteryLevel(level); };
 
   void set_state_sensor(binary_sensor::BinarySensor *state_sensor) { state_sensor_ = state_sensor; }
+  void set_rssi_sensor(sensor::Sensor *rssi_sensor) { rssi_sensor_ = rssi_sensor; }
 
   void press(std::string message);
   void press(uint8_t key, bool with_timer = true);
@@ -38,6 +40,7 @@ class Esp32BleKeyboard : public PollingComponent {
 
  protected:
   binary_sensor::BinarySensor *state_sensor_;
+  sensor::Sensor *rssi_sensor_{nullptr};
 
  private:
   bool is_connected();

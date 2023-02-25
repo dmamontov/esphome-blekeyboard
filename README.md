@@ -66,6 +66,13 @@ ble_keyboard:
   reconnect: true
   buttons: true
   use_default_libs: false
+  rssi:
+    name: "RSSI"
+    filters:
+      - filter_out: NAN
+      - sliding_window_moving_average:
+          window_size: 60
+          send_every: 60
 ```
 
 * **id** (Optional, string): Component ID. Needed for action;
@@ -75,6 +82,7 @@ ble_keyboard:
 * **reconnect** (Optional, bool): Automatic reconnect service after disconnecting the device. (default: true);
 * **buttons** (Optional, bool): Whether to add separate buttons for [keys](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys) (default: true);
 * **use_default_libs** (Optional, bool): Whether to use the arduino standard library. (default: false).
+* **rssi** (Optional, [Sensor](https://esphome.io/components/sensor/index.html)): Adds a signal strength sensor configuration. Note that it updates every seconds, so it's best to add a filter to not spam Home Assistant.
 
 ### Actions
 

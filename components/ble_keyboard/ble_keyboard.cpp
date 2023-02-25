@@ -50,7 +50,26 @@ void Esp32BleKeyboard::start() {
   pServer->startAdvertising();
 }
 
-void Esp32BleKeyboard::update() { state_sensor_->publish_state(bleKeyboard.isConnected()); }
+void Esp32BleKeyboard::update() {
+  state_sensor_->publish_state(bleKeyboard.isConnected());
+  if (rssi_sensor_ == nullptr) return;
+  if (bleKeyboard.isConnected()) {
+      std::vector<uint16_t> ids = pServer->getPeerDevices();
+
+      for (uint16_t &id : ids) {
+        int8_t rssiValue = 0;
+        int rc = ble_gap_conn_rssi(id, &rssiValue);
+        if(rc != 0) {
+            ESP_LOGE(TAG, "Failed to read RSSI error code: %d (connection: %i)",
+                                    rc, id);
+        } else {
+          rssi_sensor_->publish_state(rssiValue);
+        }
+      }
+  } else {
+    rssi_sensor_->publish_state(NAN);
+  }
+}
 
 bool Esp32BleKeyboard::is_connected() {
   if (!bleKeyboard.isConnected()) {

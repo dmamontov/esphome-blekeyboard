@@ -72,6 +72,8 @@ ble_keyboard:
   reconnect: true
   battery_level: 50
   buttons: true
+  rssi:
+    name: "RSSI"
 
 text_sensor:
   - platform: homeassistant
