@@ -95,7 +95,6 @@ RSSI_SENSOR_SCHEMA: Final = sensor.sensor_schema(
         ).extend(
             {
                 cv.Optional(CONF_NAME, default="RSSI"): cv.string,
-                cv.Optional(CONF_DISABLED_BY_DEFAULT, default=True): cv.boolean,
             }
         )
 
