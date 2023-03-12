@@ -64,6 +64,7 @@ ble_keyboard:
   manufacturer_id: "MamonTech"
   battery_level: 50
   reconnect: true
+  advertise_on_start: true
   buttons: true
   use_default_libs: false
 ```
@@ -73,6 +74,7 @@ ble_keyboard:
 * **manufacturer_id** (Optional, string): Keyboard manufacturer (default: Esp32BleKeyboard);
 * **battery_level** (Optional, int): Keyboard battery level (default: 100);
 * **reconnect** (Optional, bool): Automatic reconnect service after disconnecting the device. (default: true);
+* **advertise_on_start** (Optional, bool): Automatic advertisement when the ESP device starts. (default: true);
 * **buttons** (Optional, bool): Whether to add separate buttons for [keys](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys) (default: true);
 * **use_default_libs** (Optional, bool): Whether to use the arduino standard library. (default: false).
 

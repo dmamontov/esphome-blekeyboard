@@ -37,6 +37,7 @@ DOMAIN: Final = "ble_keyboard"
 CONF_TEXT: Final = "text"
 CONF_KEYS: Final = "keys"
 CONF_RECONNECT: Final = "reconnect"
+CONF_ADVERTISE_ON_START: Final = "advertise_on_start"
 CONF_BUTTONS: Final = "buttons"
 CONF_USE_DEFAULT_LIBS: Final = "use_default_libs"
 
