@@ -21,13 +21,16 @@ void Esp32BleKeyboard::setup() {
 
   pServer = BLEDevice::getServer();
 
+  ESP_LOGI("ble", "advertiseOnDisconnect(%s)", this->reconnect_ ? "true" : "false");
   pServer->advertiseOnDisconnect(this->reconnect_);
 
   bleKeyboard.releaseAll();
 }
 
 void Esp32BleKeyboard::stop() {
+  ESP_LOGI("ble", "stop()");
   if (this->reconnect_) {
+    ESP_LOGI("ble", "advertiseOnDisconnect(false)");
     pServer->advertiseOnDisconnect(false);
   }
 
@@ -43,7 +46,9 @@ void Esp32BleKeyboard::stop() {
 }
 
 void Esp32BleKeyboard::start() {
+  ESP_LOGI("ble", "start()");
   if (this->reconnect_) {
+    ESP_LOGI("ble", "advertiseOnDisconnect(true)");
     pServer->advertiseOnDisconnect(true);
   }
 
