@@ -78,6 +78,45 @@ ble_keyboard:
 * **buttons** (Optional, bool): Whether to add separate buttons for [keys](https://github.com/dmamontov/esphome-blekeyboard/wiki/Keys) (default: true);
 * **use_default_libs** (Optional, bool): Whether to use the arduino standard library. (default: false).
 
+#### Controlling keyboard availability when `advertise_on_start` is `False`
+
+By default, the keyboard advertises its existence on start.  You can turn
+this off, but this creates a problem — how to ensure that the keyboard
+is available on demand?
+
+In your ESP description, you can create a switch that does exactly that:
+
+```
+globals:
+  - id: keyboard_enabled
+    type: bool
+    restore_value: no
+    initial_value: "false"
+
+switch:
+  - platform: template
+    name: Enabled
+    icon: mdi:power
+    lambda: |-
+      if (id(keyboard_enabled)) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - ble_keyboard.start: le_keyboard
+      - lambda: |-
+          id(keyboard_enabled) = true;
+    turn_off_action:
+      - ble_keyboard.stop: le_keyboard
+      - lambda: |-
+          id(keyboard_enabled) = false;
+```
+
+When toggled on, the switch will start the keyboard and begin advertising
+it.  When toggled off, the keyboard will disconnect all clients and stop
+advertising — ensuring clients cannot reconnect.
+
 ### Actions
 
 #### ble_keyboard.print
