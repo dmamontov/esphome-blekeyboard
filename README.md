@@ -98,7 +98,7 @@ switch:
     name: Enabled
     icon: mdi:power
     lambda: |-
-      if (id(keyboard_enabled)) {
+      return id(keyboard_enabled);
         return true;
       } else {
         return false;
