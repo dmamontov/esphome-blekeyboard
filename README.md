@@ -105,7 +105,9 @@ switch:
       }
     turn_on_action:
       - ble_keyboard.start: le_keyboard
-      - lambda: |-
+      - globals.set:
+           id: keyboard_enabled
+           value: "true"
           id(keyboard_enabled) = true;
     turn_off_action:
       - ble_keyboard.stop: le_keyboard
